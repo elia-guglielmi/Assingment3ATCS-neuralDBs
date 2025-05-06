@@ -1,0 +1,323 @@
+[
+  {
+    "unique_id": "sentiment_analysis_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
+    "question": "Which cards have flavor text with negative sentiment?",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "068275d5-00e8-5201-9a91-5d83f6d1b95b",
+        "name": "Ostiary Thrull",
+        "flavorText": "Orzhov churches don't pass the plate for collection. They charge for admission.",
+        "text": "{W}, {T}: Tap target creature.",
+        "type": "Creature — Thrull"
+      }
+    ],
+    "expected_result": [
+      "Ostiary Thrull"
+    ],
+    "udf_justification": "Standard SQL cannot analyze sentiment in text. An LLM UDF is needed to evaluate the emotional tone of flavorText."
+  },
+  {
+    "unique_id": "entity_classification_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
+    "question": "What is the archetype of Twilight Prophet?",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
+        "name": "Twilight Prophet",
+        "flavorText": "The blood of the ancients flows in her veins, and the whispers of the dead echo in her mind.",
+        "text": "Flying\nAscend (If you control ten or more permanents, you get the city’s blessing for the rest of the game.)\nAt the beginning of your upkeep, if you have the city’s blessing, reveal the top card of your library and put it into your hand. Each opponent loses X life and you gain X life, where X is that card’s mana value.",
+        "type": "Creature — Vampire Cleric"
+      }
+    ],
+    "expected_result": [
+      {
+        "name": "Twilight Prophet",
+        "archetype": "control"
+      }
+    ],
+    "udf_justification": "Card archetype classification (aggro, control, combo) requires an understanding of strategic mechanics, which is beyond standard SQL. An LLM UDF is needed to interpret card text and classify it appropriately."
+  },
+  {
+    "unique_id": "entity_recognition_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
+    "question": "Which cards mention creatures or people in their flavor text?",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "4d40e2b6-9c14-574e-9096-a7974e7c03ca",
+        "name": "Dream Stalker",
+        "flavorText": "What happens when it is the dream that wakes and the sleeper that fades?",
+        "text": "When Dream Stalker enters the battlefield, return a permanent you control to its owner's hand.",
+        "type": "Creature \u2014 Illusion"
+      },
+      {
+        "uuid": "f5266746-23a5-56f6-8f8b-a317956203ca",
+        "name": "Civic Wayfinder",
+        "flavorText": "\"These alleys are not safe. Come, I can guide you back to the market square.\"",
+        "text": "When Civic Wayfinder enters the battlefield, you may search your library for a basic land card...",
+        "type": "Creature \u2014 Elf Druid Warrior"
+      },
+      {
+        "uuid": "068275d5-00e8-5201-9a91-5d83f6d1b95b",
+        "name": "Ostiary Thrull",
+        "flavorText": "Orzhov churches don't pass the plate for collection. They charge for admission.",
+        "text": "{W}, {T}: Tap target creature.",
+        "type": "Creature — Thrull"
+      },
+      {
+        "uuid": "6bded0a1-5a83-5f68-b252-681e5de7ce1e",
+        "name": "Lady Sun",
+        "flavorText": "Sister to Sun Quan and wife to Liu Bei, Lady Sun often felt her loyalty to both tested.",
+        "text": "{T}: Return Lady Sun and another target creature to their owners' hands. Activate this ability only during your turn, before attackers are declared.",
+        "type": "Legendary Creature — Human Advisor"
+      },
+      {
+        "uuid": "a0353866-85e4-545b-88ae-185095debe42",
+        "name": "Revolutionary Rebuff",
+        "flavorText": "By the time a Consulate sanction becomes official, the renegade quicksmiths have already found a way to circumvent it.",
+        "text": "Counter target nonartifact spell unless its controller pays {2}.",
+        "type": "Instant"
+      }
+    ],
+    "expected_result": [
+      "Civic Wayfinder","Ostiary Thrull","Lady Sun","Revolutionary Rebuff"
+    ],
+    "udf_justification": "Identifying mentions of entities like people or creature types in natural language requires named entity recognition."
+  },
+  {
+    "unique_id": "data_cleaning_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
+    "question": "Find cards where the flavor text appears to contain malformed quotation marks or HTML encoding.",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "2f908c10-fb4e-5d2a-a007-e7bc9a1a3d86",
+        "name": "Helm of the Gods",
+        "flavorText": "Its blessings are as numerous as the stars of Nyx&mdash;and just as distant.",
+        "text": "Equipped creature gets +1/+1 for each enchantment you control.",
+        "type": "Artifact \u2014 Equipment"
+      }
+    ],
+    "expected_result": [
+      "Helm of the Gods"
+    ],
+    "udf_justification": "Standard SQL cannot interpret or clean up malformed HTML entities or character encodings in text fields."
+  },
+  {
+    "unique_id": "schema_alignment_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
+    "question": "Map the card properties to Schema.org types and properties.",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "6bded0a1-5a83-5f68-b252-681e5de7ce1e",
+        "name": "Lady Sun",
+        "flavorText": "Sister to Sun Quan and wife to Liu Bei, Lady Sun often felt torn between family loyalty and personal duty.",
+        "text": "{T}: Return Lady Sun and another target creature to their owners' hands.",
+        "type": "Legendary Creature \u2014 Human Advisor"
+      }
+    ],
+    "expected_result": [
+      {
+        "name": "Lady Sun",
+        "mapped_properties": {
+          "name": "name",
+          "flavorText": "description",
+          "text": "text",
+          "type": "additionalType"
+        }
+      }
+    ],
+    "udf_justification": "Schema alignment to external ontologies like Schema.org requires semantic reasoning beyond SQL."
+  },
+  {
+    "unique_id": "cell_imputation_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT, power TEXT, toughness TEXT)",
+    "question": "Fill in the missing toughness value of creatures based on other card fields.",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "a1d2345b-89c7-4e7c-b6f8-03c4412e1890",
+        "name": "Civic Wayfinder",
+        "flavorText": "\"These alleys are not safe. Come, I can guide you back to the market square.\"",
+        "text": "When Civic Wayfinder enters the battlefield, you may search your library for a basic land card, reveal it, and put it into your hand. Then shuffle your library.",
+        "type": "Creature — Elf Druid Warrior",
+        "power": "2",
+        "toughness": null
+      },
+      {
+        "uuid": "4d40e2b6-9c14-574e-9096-a7974e7c03ca",
+        "name": "Dream Stalker",
+        "flavorText": "What happens when it is the dream that wakes and the sleeper that fades?",
+        "text": "When Dream Stalker enters the battlefield, return a permanent you control to its owner's hand.",
+        "type": "Creature \u2014 Illusion",
+        "power": "1",
+        "toughness": null
+      },
+      {
+        "uuid": "ceedc6a5-a4e3-59c4-884d-d85076d8616d",
+        "name": "Esper Sojourners",
+        "flavorText": null,
+        "text": "When you cycle Esper Sojourners or it dies, you may tap target permanent.",
+        "type": "Artifact Creature \u2014 Vedalken Wizard",
+        "power": "2",
+        "toughness": null
+      }
+    ],
+    "expected_result": [
+      {
+        "name": "Civic Wayfinder",
+        "imputed_toughness": "2"
+      },
+      {
+        "name": "Dream Stalker",
+        "imputed_toughness": "5"
+      },
+      {
+        "name": "Esper Sojourners",
+        "imputed_toughness": "3"
+      }
+    ],
+    "udf_justification": "Estimating missing toughness values based on other card characteristics (e.g., type, power, text) requires reasoning and knowledge of common card stats, which is beyond SQL capabilities."
+  },
+  {
+    "unique_id": "summarization_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, date TEXT, ruling TEXT)",
+    "question": "Summarize the rulings for the card 'Esper Sojourners'.",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "ceedc6a5-a4e3-59c4-884d-d85076d8616d",
+        "name": "Esper Sojourners",
+        "flavorText": null,
+        "text": "When you cycle Esper Sojourners or it dies, you may tap target permanent.",
+        "type": "Artifact Creature \u2014 Vedalken Wizard"
+      },
+      {
+        "uuid": "ceedc6a5-a4e3-59c4-884d-d85076d8616d",
+        "date": "2008-10-01",
+        "ruling": "Cycling is an activated ability. Effects that prevent activated abilities won't prevent cycling."
+      },
+      {
+        "uuid": "ceedc6a5-a4e3-59c4-884d-d85076d8616d",
+        "date": "2009-05-01",
+        "ruling": "The triggered ability acts as a cycle-triggered ability."
+      }
+    ],
+    "expected_result": [
+      {
+        "name": "Esper Sojourners",
+        "summary": "Cycling is an activated ability not affected by suppression, and it triggers another ability when used."
+      }
+    ],
+    "udf_justification": "Summarizing multiple rulings into a coherent statement requires semantic aggregation beyond SQL capabilities."
+  },
+  {
+    "unique_id": "multi_udf_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, date TEXT, ruling TEXT)",
+    "question": "Which cards with positive flavor text sentiment also have complex rulings? Summarize the rulings.",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
+        "name": "Twilight Prophet",
+        "flavorText": "The blood of the ancients flows in her veins, and the whispers of the dead echo in her mind.",
+        "text": "Flying\nAscend (If you control ten or more permanents, you get the city\u2019s blessing for the rest of the game.)...",
+        "type": "Creature \u2014 Vampire Cleric"
+      },
+      {
+        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
+        "date": "2018-01-19",
+        "ruling": "If you don\u2019t have the city\u2019s blessing, Twilight Prophet\u2019s ability doesn\u2019t trigger at all."
+      },
+      {
+        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
+        "date": "2018-01-19",
+        "ruling": "Twilight Prophet\u2019s ability checks whether you have the city\u2019s blessing only as it triggers."
+      }
+    ],
+    "expected_result": [
+      {
+        "name": "Twilight Prophet",
+        "summary": "Twilight Prophet only triggers if you already have the city\u2019s blessing at the time of triggering. Timing is critical.",
+        "sentiment": "negative"
+      }
+    ],
+    "udf_justification": "Sentiment analysis is needed for evaluating emotional tone; summarization is needed to condense multiple rulings into one coherent explanation."
+  },
+  {
+    "unique_id": "group_by_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
+    "question": "How many cards of each type have text that includes giving a buff?",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "f5266746-23a5-56f6-8f8b-a317956203ca",
+        "name": "Civic Wayfinder",
+        "flavorText": "\"These alleys are not safe. Come, I can guide you back to the market square.\"",
+        "text": "...",
+        "type": "Creature \u2014 Elf Druid Warrior"
+      },
+      {
+        "uuid": "f87ae87b-26a7-5b93-86bb-f07c7ec3b091",
+        "name": "Bitter Ordeal",
+        "flavorText": "\"The world is a meat grinder, and we're all on the menu.\" \u2014Geth",
+        "text": "...",
+        "type": "Sorcery"
+      }
+    ],
+    "expected_result": [
+      {
+        "type": "Creature \u2014 Elf Druid Warrior",
+        "count": 1
+      },
+      {
+        "type": "Sorcery",
+        "count": 1
+      }
+    ],
+    "udf_justification": "Quotation detection requires language modeling; GROUP BY aggregation combines counts per card type."
+  },
+  {
+    "unique_id": "join_001",
+    "database_id": "mtg_db",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, date TEXT, ruling TEXT)",
+    "question": "Which cards have rulings that mention 'damage prevention'?",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "name": "Divine Deflection",
+        "flavorText": "Only the divine may dictate the course of fate.",
+        "text": "Prevent the next X damage that would be dealt to any number of target creatures and/or players this turn...",
+        "type": "Instant"
+      },
+      {
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "ruling": "Damage prevention effects apply even if a creature would deal more damage than is prevented."
+      },
+      {
+        "uuid": "fea48b09-0f75-525a-8506-034130c0f6b6",
+        "name": "Blizzard Brawl",
+        "flavorText": null,
+        "text": "Choose target creature you control and target creature you don't control. If you control three or more snow permanents, the creature you control gets +1/+0 and gains indestructible until end of turn...",
+        "type": "Snow Sorcery"
+      },
+      {
+        "uuid": "fea48b09-0f75-525a-8506-034130c0f6b6",
+        "ruling": "Check whether you control three or more snow permanents as Blizzard Brawl is resolving to see if the target creature you control gets +1/+0 and gains indestructible. That creature will still fight even if it doesn’t get those bonuses.."
+      },
+      {
+        "uuid": "fea48b09-0f75-525a-8506-034130c0f6b6",
+        "ruling": "If either target is an illegal target as Blizzard Brawl tries to resolve, neither creature will fight and no damage will be dealt."
+      }
+    ],
+    "expected_result": [
+      "Divine Deflection",
+      "Blizzard Brawl"
+    ],
+    "udf_justification": "Requires keyword detection in text fields after joining rulings and cards on UUID."
+  }
+]
