@@ -218,32 +218,50 @@
   {
     "unique_id": "multi_udf_001",
     "database_id": "mtg_db",
-    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, date TEXT, ruling TEXT)",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, ruling TEXT)",
     "question": "Which cards with positive flavor text sentiment also have complex rulings? Summarize the rulings.",
     "hypothetical_relevant_data": [
       {
-        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
-        "name": "Twilight Prophet",
-        "flavorText": "The blood of the ancients flows in her veins, and the whispers of the dead echo in her mind.",
-        "text": "Flying\nAscend (If you control ten or more permanents, you get the city\u2019s blessing for the rest of the game.)...",
-        "type": "Creature \u2014 Vampire Cleric"
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "name": "Crested SunmareCrested Sunmare",
+        "flavorText": "It is evidence that some pure corner of the world must still exist",
+        "text": "Other Horses you control have indestructible.\nAt the beginning of each end step, if you gained life this turn, create a 5/5 white Horse creature token",
+        "type": "Creature — Horse"
       },
       {
-        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
-        "date": "2018-01-19",
-        "ruling": "If you don\u2019t have the city\u2019s blessing, Twilight Prophet\u2019s ability doesn\u2019t trigger at all."
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "ruling": "If a creature has been dealt damage, that damage remains marked on it until the cleanup step. If another Horse you control has been dealt lethal damage, and later in the turn Crested Sunmare leaves the battlefield, that Horse will be destroyed."
       },
       {
-        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
-        "date": "2018-01-19",
-        "ruling": "Twilight Prophet\u2019s ability checks whether you have the city\u2019s blessing only as it triggers."
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "ruling": "Crested Sunmare’s triggered ability won’t trigger unless you’ve gained life in the turn before the end step began. It can’t be satisfied by another triggered ability causing you to gain life during that end step."
+      },
+      {
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "ruling": "Crested Sunmare’s triggered ability cares only whether you gained life in the turn, even if Crested Sunmare wasn’t on the battlefield when that happened. It doesn’t care how much you gained, whether you also lost life, or even whether you lost more life t"
+      },
+      {
+        "uuid": "a07e27bb-cacf-5e9b-b0d3-248eac66e035",
+        "name": "Helm of the Gods",
+        "flavorText": "Its blessings are as numerous as the stars of Nyx.",
+        "text": "Equipped creature gets +1/+1 for each enchantment you control.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+        "type": "Artifact — Equipment"
+      },
+      {
+        "uuid": "a07e27bb-cacf-5e9b-b0d3-248eac66e035",
+        "ruling": "If you cast an Aura spell targeting a permanent controlled by an opponent, you still control that Aura. It will count toward the bonus given by Helm of the Gods"
       }
     ],
     "expected_result": [
       {
-        "name": "Twilight Prophet",
-        "summary": "Twilight Prophet only triggers if you already have the city\u2019s blessing at the time of triggering. Timing is critical.",
-        "sentiment": "negative"
+        "name": "Crested SunmareCrested Sunmare",
+        "summary": "Damage stays until cleanup. If Sunmare leaves after lethal Horse damage, it dies. Needs life gain before end step, not during.",
+        "sentiment": "positive"
+      },
+      {
+        "name": "Helm of the Gods",
+        "summary": "You control Auras cast on opponent's permanents. They count for Helm of the Gods' bonus.",
+        "sentiment": "positive"
       }
     ],
     "udf_justification": "Sentiment analysis is needed for evaluating emotional tone; summarization is needed to condense multiple rulings into one coherent explanation."
@@ -255,31 +273,204 @@
     "question": "How many cards of each type have text that includes giving a buff?",
     "hypothetical_relevant_data": [
       {
+      "uuid": "ceedc6a5-a4e3-59c4-884d-d85076d8616d",
+      "name": "Esper Sojourners",
+      "flavorText": "The wilder the frontier, the greater the need for a controlling hand.",
+      "text": "When you cycle Esper Sojourners or it dies, you may tap or untap target permanent.\nCycling {2}{U} ({2}{U}, Discard this card: Draw a card.)",
+      "type": "Artifact Creature — Vedalken Wizard"},
+      {
+        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
+        "name": "Twilight Prophet",
+        "flavorText": null,
+        "text": "Flying\nAscend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nAt the beginning of your upkeep, if you have the city's blessing, reveal the top card of your library and put it into your hand. Each opponent los",
+        "type": "Creature — Vampire Cleric"},
+      {
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "name": "Crested Sunmare",
+        "flavorText": "It is evidence that some pure corner of the world must still exist.\n—Djeru, former Tah-crop initiate",
+        "text": "Other Horses you control have indestructible.\nAt the beginning of each end step, if you gained life this turn, create a 5/5 white Horse creature token.",
+        "type": "Creature — Horse"},
+      {
+        "uuid": "4d40e2b6-9c14-574e-9096-a7974e7c03ca",
+        "name": "Dream Stalker",
+        "flavorText": "What happens when it is the dream that wakes and the sleeper that fades into memory?",
+        "text": "When Dream Stalker enters the battlefield, return a permanent you control to its owner's hand.",
+        "type": "Creature — Illusion"},
+      {
         "uuid": "f5266746-23a5-56f6-8f8b-a317956203ca",
         "name": "Civic Wayfinder",
-        "flavorText": "\"These alleys are not safe. Come, I can guide you back to the market square.\"",
-        "text": "...",
-        "type": "Creature \u2014 Elf Druid Warrior"
-      },
+        "flavorText": "These alleys are not safe. Come, I can guide you back to the market square.",
+        "text": "When Civic Wayfinder enters the battlefield, you may search your library for a basic land card, reveal it, and put it into your hand. If you do, shuffle your library.",
+        "type": "Creature — Elf Druid Warrior"},
       {
-        "uuid": "f87ae87b-26a7-5b93-86bb-f07c7ec3b091",
-        "name": "Bitter Ordeal",
-        "flavorText": "\"The world is a meat grinder, and we're all on the menu.\" \u2014Geth",
-        "text": "...",
-        "type": "Sorcery"
-      }
-    ],
+        "uuid": "0d6962de-90fc-51ba-8246-bc794ae1ee57",
+        "name": "Secluded Steppe",
+        "flavorText": null,
+        "text": "Secluded Steppe enters the battlefield tapped.\n{T}: Add {W}.\nCycling {W} ({W}, Discard this card: Draw a card.)",
+        "type": "Land"},
+      {
+        "uuid": "b42be0d3-320f-56c9-9464-9f6f9eb8f539",
+        "name": "Karplusan Forest",
+        "flavorText": null,
+        "text": "{T}: Add {C}.\n{T}: Add {R} or {G}. Karplusan Forest deals 1 damage to you.",
+        "type": "Land"},
+      {
+        "uuid": "16690c71-f09f-5c3a-bf28-ebdc8341be90",
+        "name": "Diamond Mare",
+        "flavorText": "When it passes, rainbows follow.",
+        "text": "As Diamond Mare enters the battlefield, choose a color.\nWhenever you cast a spell of the chosen color, you gain 1 life.",
+        "type": "Artifact Creature — Horse"},
+      {
+        "uuid": "fea48b09-0f75-525a-8506-034130c0f6b6",
+        "name": "Blizzard Brawl",
+        "flavorText": null,
+        "text": "Choose target creature you control and target creature you don't control. If you control three or more snow permanents, the creature you control gets +1/+0 and gains indestructible until end of turn. Then those creatures fight each other. (Each deals dama",
+        "type": "Snow Sorcery"},
+      {
+        "uuid": "a07e27bb-cacf-5e9b-b0d3-248eac66e035",
+        "name": "Helm of the Gods",
+        "flavorText": "Its blessings are as numerous as the stars of Nyx.",
+        "text": "Equipped creature gets +1/+1 for each enchantment you control.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)",
+        "type": "Artifact — Equipment"},
+      {
+        "uuid": "8c8d0389-4822-5f04-bd49-b6f58def95ad",
+        "name": "Ancestral Memories",
+        "flavorText": "It's a poor sort of memory that only works backwards.\n—Lewis Carroll,\n*Through the Looking Glass*",
+        "text": "Look at the top seven cards of your library. Put two of them into your hand and the rest into your graveyard.",
+        "type": "Sorcery"},
+      {
+        "uuid": "068275d5-00e8-5201-9a91-5d83f6d1b95b",
+        "name": "Ostiary Thrull",
+        "flavorText": "Orzhov churches don't pass the plate for collection. They charge for admission.",
+        "text": "{W}, {T}: Tap target creature.",
+        "type": "Creature — Thrull"},
+      {
+        "uuid": "025e196f-f895-5aab-a338-c3ea3a26a2fa",
+        "name": "Necrobite",
+        "flavorText": null,
+        "text": "Target creature gains deathtouch until end of turn. Regenerate it. (The next time that creature would be destroyed this turn, it isn't. Instead tap it, remove all damage from it, and remove it from combat. Any amount of damage a creature with deathtouch d",
+        "type": "Instant"},
+      {
+        "uuid": "6e965c11-1054-5008-b90c-d9a1da6a24ed",
+        "name": "Evincar's Justice",
+        "flavorText": null,
+        "text": "Buyback {3} (You may pay an additional {3} as you cast this spell. If you do, put this card into your hand as it resolves.)\nEvincar's Justice deals 2 damage to each creature and each player.",
+        "type": "Sorcery"},
+      {
+        "uuid": "45de08c2-14b8-5d4f-85c6-783735c2d66b",
+        "name": "Tempered Steel",
+        "flavorText": null,
+        "text": "Artifact creatures you control get +2/+2.",
+        "type": "Enchantment"},
+      {
+        "uuid": "6bded0a1-5a83-5f68-b252-681e5de7ce1e",
+        "name": "Lady Sun",
+        "flavorText": "Sister to Sun Quan and wife to Liu Bei, Lady Sun often felt her loyalty to both tested.",
+        "text": "{T}: Return Lady Sun and another target creature to their owners' hands. Activate this ability only during your turn, before attackers are declared.",
+        "type": "Legendary Creature — Human Advisor"},
+      {
+        "uuid": "a0353866-85e4-545b-88ae-185095debe42",
+        "name": "Revolutionary Rebuff",
+        "flavorText": "By the time a Consulate sanction becomes official, the renegade quicksmiths have already found a way to circumvent it.",
+        "text": "Counter target nonartifact spell unless its controller pays {2}.",
+        "type": "Instant"},
+      {
+        "uuid": "15eab7ec-eae3-59a0-9744-3a2ca3c4d6b2",
+        "name": "Dismal Backwater",
+        "flavorText": null,
+        "text": "Dismal Backwater enters the battlefield tapped.\nWhen Dismal Backwater enters the battlefield, you gain 1 life.\n{T}: Add {U} or {B}.",
+        "type": "Land"},
+      {
+        "uuid": "a16252b5-83ec-5709-b42a-00fed3941629",
+        "name": "Illusions of Grandeur",
+        "flavorText": null,
+        "text": "Cumulative upkeep {2} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)\nWhen Illusions of Grandeur enters the battlefield, you gain 20 life.\nWhen Illusions",
+        "type": "Enchantment"},
+      {
+        "uuid": "44aa02eb-c5ae-5a2b-9a1e-c72bde2feafc",
+        "name": "Maritime Guard",
+        "flavorText": "To stand as a guardian of the sea, one must possess the resolve of a mounting wave.",
+        "text": null,
+        "type": "Creature — Merfolk Soldier"}
+  ],
     "expected_result": [
       {
-        "type": "Creature \u2014 Elf Druid Warrior",
-        "count": 1
-      },
-      {
-        "type": "Sorcery",
-        "count": 1
-      }
+      "type": "Artifact Creature — Horse", 
+      "buff_count": 0,
+      "total_cards": 1
+    },
+    {
+      "type": "Artifact Creature — Vedalken Wizard", 
+      "buff_count": 0, 
+      "total_cards": 1
+    },
+    {
+      "type": "Artifact — Equipment", 
+      "buff_count": 1, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Creature — Elf Druid Warrior", 
+      "buff_count": 0, 
+      "total_cards": 1
+    },
+    {
+      "type": "Creature — Horse", 
+      "buff_count": 1, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Creature — Illusion", 
+      "buff_count": 0, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Creature — Merfolk Soldier", 
+      "buff_count": 0, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Creature — Thrull", 
+      "buff_count": 0, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Creature — Vampire Cleric", 
+      "buff_count": 0, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Enchantment", 
+      "buff_count": 1, 
+      "total_cards": 2
+    }, 
+    {
+      "type": "Instant", 
+      "buff_count": 1, 
+      "total_cards": 2
+    }, 
+    {
+      "type": "Land", 
+      "buff_count": 0, 
+      "total_cards": 3
+    }, 
+    {
+      "type": "Legendary Creature — Human Advisor", 
+      "buff_count": 0, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Snow Sorcery", 
+      "buff_count": 1, 
+      "total_cards": 1
+    }, 
+    {
+      "type": "Sorcery", 
+      "buff_count": 0, 
+      "total_cards": 2
+    }
     ],
-    "udf_justification": "Quotation detection requires language modeling; GROUP BY aggregation combines counts per card type."
+    "udf_justification": "Requires language understanding and detection in text fields; GROUP BY aggregation combines counts per card type."
   },
   {
     "unique_id": "join_001",
@@ -318,6 +509,6 @@
       "Divine Deflection",
       "Blizzard Brawl"
     ],
-    "udf_justification": "Requires keyword detection in text fields after joining rulings and cards on UUID."
+    "udf_justification": "Requires language understanding and detection in text fields after joining rulings and cards on UUID."
   }
 ]
