@@ -1,7 +1,7 @@
 [
   {
     "unique_id": "sentiment_analysis_001",
-    "database_id": "mtg_db",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
     "question": "Which cards have flavor text with negative sentiment?",
     "hypothetical_relevant_data": [
@@ -20,7 +20,7 @@
   },
   {
     "unique_id": "entity_classification_001",
-    "database_id": "mtg_db",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
     "question": "What is the archetype of Twilight Prophet?",
     "hypothetical_relevant_data": [
@@ -42,7 +42,7 @@
   },
   {
     "unique_id": "entity_recognition_001",
-    "database_id": "mtg_db",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
     "question": "Which cards mention creatures or people in their flavor text?",
     "hypothetical_relevant_data": [
@@ -88,27 +88,8 @@
     "udf_justification": "Identifying mentions of entities like people or creature types in natural language requires named entity recognition."
   },
   {
-    "unique_id": "data_cleaning_001",
-    "database_id": "mtg_db",
-    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
-    "question": "Find cards where the flavor text appears to contain malformed quotation marks or HTML encoding.",
-    "hypothetical_relevant_data": [
-      {
-        "uuid": "2f908c10-fb4e-5d2a-a007-e7bc9a1a3d86",
-        "name": "Helm of the Gods",
-        "flavorText": "Its blessings are as numerous as the stars of Nyx&mdash;and just as distant.",
-        "text": "Equipped creature gets +1/+1 for each enchantment you control.",
-        "type": "Artifact \u2014 Equipment"
-      }
-    ],
-    "expected_result": [
-      "Helm of the Gods"
-    ],
-    "udf_justification": "Standard SQL cannot interpret or clean up malformed HTML entities or character encodings in text fields."
-  },
-  {
     "unique_id": "schema_alignment_001",
-    "database_id": "mtg_db",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
     "question": "Map the card properties to Schema.org types and properties.",
     "hypothetical_relevant_data": [
@@ -134,8 +115,8 @@
     "udf_justification": "Schema alignment to external ontologies like Schema.org requires semantic reasoning beyond SQL."
   },
   {
-    "unique_id": "cell_imputation_001",
-    "database_id": "mtg_db",
+    "unique_id": "imputation_missing_001",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT, power TEXT, toughness TEXT)",
     "question": "Fill in the missing toughness value of creatures based on other card fields.",
     "hypothetical_relevant_data": [
@@ -185,7 +166,7 @@
   },
   {
     "unique_id": "summarization_001",
-    "database_id": "mtg_db",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, date TEXT, ruling TEXT)",
     "question": "Summarize the rulings for the card 'Esper Sojourners'.",
     "hypothetical_relevant_data": [
@@ -216,8 +197,8 @@
     "udf_justification": "Summarizing multiple rulings into a coherent statement requires semantic aggregation beyond SQL capabilities."
   },
   {
-    "unique_id": "multi_udf_001",
-    "database_id": "mtg_db",
+    "unique_id": "analyze_sentiment_summarize_001",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, ruling TEXT)",
     "question": "Which cards with positive flavor text sentiment also have complex rulings? Summarize the rulings.",
     "hypothetical_relevant_data": [
@@ -267,8 +248,8 @@
     "udf_justification": "Sentiment analysis is needed for evaluating emotional tone; summarization is needed to condense multiple rulings into one coherent explanation."
   },
   {
-    "unique_id": "group_by_001",
-    "database_id": "mtg_db",
+    "unique_id": "entity_recognition_002",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
     "question": "How many cards of each type have text that includes giving a buff?",
     "hypothetical_relevant_data": [
@@ -473,8 +454,8 @@
     "udf_justification": "Requires language understanding and detection in text fields; GROUP BY aggregation combines counts per card type."
   },
   {
-    "unique_id": "join_001",
-    "database_id": "mtg_db",
+    "unique_id": "classification_002",
+    "database_id": "card_games",
     "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT); CREATE TABLE rulings (uuid TEXT, date TEXT, ruling TEXT)",
     "question": "Which cards have rulings that mention 'damage prevention'?",
     "hypothetical_relevant_data": [
@@ -510,5 +491,86 @@
       "Blizzard Brawl"
     ],
     "udf_justification": "Requires language understanding and detection in text fields after joining rulings and cards on UUID."
+  },
+  {
+    "unique_id": "entity_impute_classify_001",
+    "database_id": "card_games",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT, power TEXT, toughness TEXT, rarity TEXT, manaValue INTEGER)",
+    "question": "For creature cards with missing rarity, predict the rarity based on their stats and classify them by their gameplay archetype.",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "fb2e5522-233a-547f-b600-b81701a2a29e",
+        "name": "Twilight Prophet",
+        "flavorText": null,
+        "text": "Flying\nAscend (If you control ten or more permanents, you get the city's blessing for the rest of the game.)\nAt the beginning of your upkeep, if you have the city's blessing, reveal the top card of your library and put it into your hand. Each opponent loses X life and you gain X life, where X is that card's mana value.",
+        "type": "Creature — Vampire Cleric",
+        "power": "2",
+        "toughness": "4",
+        "rarity": "Mythic Rare",
+        "manaValue": 4
+      },
+      {
+        "uuid": "4d40e2b6-9c14-574e-9096-a7974e7c03ca",
+        "name": "Dream Stalker",
+        "flavorText": "What happens when it is the dream that wakes and the sleeper that fades into memory?",
+        "text": "When Dream Stalker enters the battlefield, return a permanent you control to its owner's hand.",
+        "type": "Creature — Illusion",
+        "power": "1",
+        "toughness": "5",
+        "rarity": null,
+        "manaValue": 3
+      },
+      {
+        "uuid": "068275d5-00e8-5201-9a91-5d83f6d1b95b",
+        "name": "Ostiary Thrull",
+        "flavorText": "Orzhov churches don't pass the plate for collection. They charge for admission.",
+        "text": "{W}, {T}: Tap target creature.",
+        "type": "Creature — Thrull",
+        "power": "2",
+        "toughness": "2",
+        "rarity": null,
+        "manaValue": 3
+      },
+      {
+        "uuid": "609cd717-5e92-5b4d-b04c-2e26b9965d2b",
+        "name": "Crested Sunmare",
+        "flavorText": "It is evidence that some pure corner of the world must still exist.",
+        "text": "Other Horses you control have indestructible.\nAt the beginning of each end step, if you gained life this turn, create a 5/5 white Horse creature token.",
+        "type": "Creature — Horse",
+        "power": "5",
+        "toughness": "5",
+        "rarity": null,
+        "manaValue": 5
+      },
+      {
+        "uuid": "f5266746-23a5-56f6-8f8b-a317956203ca",
+        "name": "Civic Wayfinder",
+        "flavorText": "\"These alleys are not safe. Come, I can guide you back to the market square.\"",
+        "text": "When Civic Wayfinder enters the battlefield, you may search your library for a basic land card, reveal it, and put it into your hand. Then shuffle your library.",
+        "type": "Creature — Elf Druid Warrior",
+        "power": "2",
+        "toughness": "2",
+        "rarity": "Common",
+        "manaValue": 3
+      }
+    ],
+    "expected_result": [
+      {
+        "name": "Dream Stalker",
+        "imputed_rarity": "Uncommon",
+        "archetype": "control"
+      },
+      {
+        "name": "Ostiary Thrull",
+        "imputed_rarity": "Common",
+        "archetype": "control"
+      },
+      {
+        "name": "Crested Sunmare",
+        "imputed_rarity": "Rare",
+        "archetype": "hybrid"
+      }
+    ],
+    "udf_justification": "This requires multiple UDFs: (1) Imputation of missing rarity values based on card stats, text complexity, and power level; (2) Entity classification to determine the gameplay archetype each card fits into."
   }
 ]
