@@ -1,23 +1,5 @@
 [
-  {
-    "unique_id": "sentiment_analysis_001",
-    "database_id": "card_games",
-    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
-    "question": "Which cards have flavor text with negative sentiment?",
-    "hypothetical_relevant_data": [
-      {
-        "uuid": "068275d5-00e8-5201-9a91-5d83f6d1b95b",
-        "name": "Ostiary Thrull",
-        "flavorText": "Orzhov churches don't pass the plate for collection. They charge for admission.",
-        "text": "{W}, {T}: Tap target creature.",
-        "type": "Creature — Thrull"
-      }
-    ],
-    "expected_result": [
-      "Ostiary Thrull"
-    ],
-    "udf_justification": "Standard SQL cannot analyze sentiment in text. An LLM UDF is needed to evaluate the emotional tone of flavorText."
-  },
+
   {
     "unique_id": "entity_classification_001",
     "database_id": "card_games",

@@ -1,0 +1,83 @@
+[
+  {
+    "unique_id": "sentiment_analysis_001",
+    "database_id": "card_games/cards_sample20",
+    "table_schema": "CREATE TABLE cards (uuid TEXT PRIMARY KEY, name TEXT, flavorText TEXT, text TEXT, type TEXT)",
+    "question": "Which cards have flavor text with negative sentiment?",
+    "hypothetical_relevant_data": [
+      {
+        "uuid": "068275d5-00e8-5201-9a91-5d83f6d1b95b",
+        "name": "Ostiary Thrull",
+        "flavorText": "Orzhov churches don't pass the plate for collection. They charge for admission.",
+        "text": "{W}, {T}: Tap target creature.",
+        "type": "Creature — Thrull"
+      }
+    ],
+    "expected_result": [
+      "Ostiary Thrull"
+    ],
+    "udf_justification": "Standard SQL cannot analyze sentiment in text. An LLM UDF is needed to evaluate the emotional tone of flavorText."
+  },
+  {
+    "unique_id": "sentiment_analysis_002",
+    "database_id": "codebase/users20sample",
+    "table_schema": "CREATE TABLE users (\n  Id INTEGER PRIMARY KEY,\n  AboutMe TEXT,\n  DisplayName TEXT,\n  Reputation INTEGER\n)",
+    "question": "Find users with AboutMe descriptions having a negative sentiment (score below -0.5)",
+    "expected_result": [
+      "2609",
+      "2269"
+    ],
+    "udf_justification": "The sentiment analysis UDF provides a numeric score revealing emotional tone. Standard SQL cannot perform this nuanced text analysis, requiring an LLM-based approach to interpret subtle emotional content."
+  },
+  {
+    "unique_id": "sentiment_analysis_003",
+    "database_id": "codebase/posts20sample",
+    "table_schema": "CREATE TABLE posts (\n  Id INTEGER PRIMARY KEY,\n  Body TEXT,\n  Title TEXT,\n  Score INTEGER\n)",
+    "question": "Identify posts with highly positive sentiment (score > 0.7)",
+    "expected_result": [
+      "7153",
+      "46149",
+      "7953"
+    ],
+    "udf_justification": "Detecting nuanced positive sentiment requires sophisticated language understanding beyond simple keyword matching. An LLM UDF generates a precise sentiment score capturing emotional undertones."
+  },
+  {
+    "unique_id": "sentiment_analysis_004",
+    "database_id": "codebase/users20sample",
+    "table_schema": "CREATE TABLE users (\n  Id INTEGER PRIMARY KEY,\n  AboutMe TEXT,\n  DisplayName TEXT,\n  Reputation INTEGER\n)",
+    "question": "Find user AboutMe descriptions with neutral sentiment (between 0.2 ,-0.2)",
+    "expected_result": [
+      "41203",
+      "52599"
+    ],
+    "udf_justification": "Identifying constructive and supportive sentiment requires contextual understanding that goes beyond literal text interpretation. An LLM UDF generates a precise sentiment score capturing nuanced positive tones."
+  },
+  {
+    "unique_id": "sentiment_analysis_005",
+    "database_id": "codebase/posts20sample",
+    "table_schema": "CREATE TABLE posts (\n  Id INTEGER PRIMARY KEY,\n  Body TEXT,\n  Title TEXT,\n  Score INTEGER\n)",
+    "question": "Identify posts with slightly negative sentiment below -0.0",
+    "expected_result": [
+      "107797",
+      "60435",
+      "61283",
+      "9521",
+      "11566"
+    ],
+    "udf_justification": "Detecting nuanced critical sentiment requires sophisticated natural language processing that provides a precise emotional scoring mechanism. An LLM-based UDF captures the analytical and critical tone of technical discussions."
+  },
+  {
+    "unique_id": "sentiment_analysis_006",
+    "database_id": "card_games/rulings",
+    "table_schema": "CREATE TABLE rulings (\n  id INTEGER PRIMARY KEY,\n  text TEXT,\n  date DATE\n)",
+    "question": "Find rulings with sentiment outside the neutral range (-0.2 to 0.2)",
+    "expected_result": [
+      "Ids of rulings with distinctive emotional tone",
+      "38019",
+      "37243",
+      "61996",
+      "84807"
+    ],
+    "udf_justification": "Understanding the subtle emotional undertones in technical rulings requires advanced contextual analysis that provides a nuanced sentiment score. An LLM UDF captures the intricate emotional nuances of rule interpretations."
+  }
+]
